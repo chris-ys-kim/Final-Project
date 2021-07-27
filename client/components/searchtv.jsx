@@ -22,8 +22,7 @@ export default function Add() {
         }
       });
   };
-  // src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-  // alt={`${movie.title} Poster`}
+
   return (
     <div className="add-page">
       <div className="container">

@@ -17,13 +17,6 @@ const useStyles = makeStyles({
   }
 });
 
-// function onClickDelete(props) {
-//   console.log('Click happened');
-//   console.log(props.movie.title);
-//   // add data to database
-//   // call POST data
-// }
-
 export default function FavDeleteCard(props) {
   const classes = useStyles();
   const movieImage = 'https://image.tmdb.org/t/p/w200' + props.movie.poster_path;
@@ -45,9 +38,9 @@ export default function FavDeleteCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {/* <Button onClick={() => onClickFav(props)} size="small" color="primary">
+        <Button onClick={() => onClickFav(props)} size="small" color="primary">
           Delete Movie
-        </Button> */}
+        </Button>
       </CardActions>
     </Card>
   );

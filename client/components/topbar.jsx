@@ -77,12 +77,12 @@ export default function SimpleTabs() {
       <TabPanel value={value} index={2}>
         <SearchPerson/>
       </TabPanel>
-      {/* <TabPanel value={value} index={3}>
+      <TabPanel value={value} index={3}>
         <Favorites/>
       </TabPanel>
       <TabPanel value={value} index={4}>
         <Dislike/>
-      </TabPanel> */}
+      </TabPanel>
     </div>
   );
 }

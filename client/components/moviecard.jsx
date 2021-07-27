@@ -31,8 +31,6 @@ export default function MediaCard(props) {
 
   const [isOpen, setIsOpen] = useState(false);
   function onClickCard(props) {
-    // add data to database
-    // call POST data
     setIsOpen(!isOpen);
   }
   const classes = useStyles();

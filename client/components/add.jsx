@@ -25,8 +25,7 @@ export default function Add() {
         }
       });
   };
-  // src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-  // alt={`${movie.title} Poster`}
+
   return (
     <div className="add-page">
       <div className="container">
@@ -45,8 +44,6 @@ export default function Add() {
             <ul className="results">
               {results.map(movie => (
                 <li key={movie.id}>
-                  {/* <p>{movie.title}</p> */}
-                  {/* {console.log(movie)} */}
                   <MediaCard movie={movie}/>
                 </li>
               ))}
