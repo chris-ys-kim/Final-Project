@@ -3,52 +3,52 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-export default class Favorites extends React.Component {
+export default class Dislike extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { favoriteMovies: [] };
+    this.state = { dislikeMovies: [] };
 
-    this.getFavorite = this.getFavorite.bind(this);
+    this.getDislike = this.getDislike.bind(this);
     this.deleteMovie = this.deleteMovie.bind(this);
-    this.mapFavoriteMovies = this.mapFavoriteMovies.bind(this);
+    this.mapDislikeMovies = this.mapDislikeMovies.bind(this);
   }
 
   componentDidMount() {
-    this.getFavorite();
+    this.getDislike();
   }
 
-  getFavorite() {
-    fetch('/api/movies/favorites')
+  getDislike() {
+    fetch('/api/movies/dislikes')
       .then(res => res.json())
-      .then(favorites => {
-        this.setState({ favoriteMovies: favorites});
+      .then(dislike => {
+        this.setState({ dislikeMovies: dislike });
       })
       .catch(error => {
         console.error('Error:', error);
       });
   }
 
-  deleteMovie(favoriteID) {
+  deleteMovie(dislikeID) {
     const data = {};
-    data.favoriteID = favoriteID;
+    data.dislikeID = dislikeID;
 
-    fetch('/api/movies/favorites/', {
+    fetch('/api/movies/dislikes', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     })
       .then(result => {
-        this.getFavorite();
+        this.getDislike();
       })
       .catch(error => {
         console.error('Error:', error);
       });
   }
 
-  mapFavoriteMovies() {
-    const movies = this.state.favoriteMovies;
+  mapDislikeMovies() {
+    const movies = this.state.dislikeMovies;
     const movieList = movies.map(movie =>
-      <Card key={ movie.favoriteID } className="root">
+      <Card key={ movie.dislikeID } className="root">
         <CardMedia
           className="media"
           image={ movie.posterUrl }
@@ -58,7 +58,7 @@ export default class Favorites extends React.Component {
           <Typography gutterBottom variant="h5" component="h2">
             { movie.title }
           </Typography>
-          <Typography onClick={ () => this.deleteMovie(movie.favoriteID) } className="delete-button" variant="body2" component="p">
+          <Typography onClick={ () => this.deleteMovie(movie.dislikeID) } className="delete-button" variant="body2" component="p">
               Delete
             </Typography>
         </CardContent>
@@ -68,11 +68,11 @@ export default class Favorites extends React.Component {
     return movieList;
   }
 
-  render() {
-    return (
-      <>
-        { this.mapFavoriteMovies() }
-      </>
+  render(){
+  return (
+    <>
+      { this.mapDislikeMovies() }
+    </>
     );
   }
 }

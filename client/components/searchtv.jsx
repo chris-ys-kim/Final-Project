@@ -10,8 +10,11 @@ export default function Add() {
     e.preventDefault();
 
     setQuery(e.target.value);
+  }
+
+  const searchMovie = (event) => {
     fetch(
-      `https://api.themoviedb.org/3/search/tv?api_key=930f628a8d2ecfb0a11f628757505c48&language=en-US&page=1&include_adult=false&query=${e.target.value}`
+      `https://api.themoviedb.org/3/search/tv?api_key=${process.env.API_KEY}&language=en-US&page=1&include_adult=false&query=${query}`
     )
       .then(res => res.json())
       .then(data => {
@@ -21,13 +24,17 @@ export default function Add() {
           setResults([]);
         }
       });
+
+    event.preventDefault();
   };
 
   return (
+    <form onSubmit={ searchMovie }>
     <div className="add-page">
       <div className="container">
         <div className="add-content">
           <div className="input-wrapper">
+            <button className="search-button" onClick={searchMovie}>Search</button>
             <input
               type="text"
               placeholder="Search for a TV Show"
@@ -48,5 +55,6 @@ export default function Add() {
         </div>
       </div>
     </div>
+  </form>
   );
 }

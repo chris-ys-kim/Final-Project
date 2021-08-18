@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-// import { ResultCard } from './ResultCard';
-import MediaCard from './moviecard';
+import PersonCard from './personcard';
 
 export default function Add() {
   const [query, setQuery] = useState('');
@@ -10,8 +9,11 @@ export default function Add() {
     e.preventDefault();
 
     setQuery(e.target.value);
+  }
+
+  const searchMovie = () => {
     fetch(
-      `https://api.themoviedb.org/3/search/person?api_key=930f628a8d2ecfb0a11f628757505c48&language=en-US&page=1&include_adult=false&query=${e.target.value}`
+      `https://api.themoviedb.org/3/search/person?api_key=${process.env.API_KEY}&language=en-US&page=1&include_adult=false&query=${query}`
     )
       .then(res => res.json())
       .then(data => {
@@ -22,43 +24,48 @@ export default function Add() {
         }
       });
 
+      event.preventDefault();
   };
 
-  return (
-    <div className="add-page">
-      <div className="container">
-        <div className="add-content">
-          <div className="input-wrapper">
-            <input
-              type="text"
-              placeholder="Search for a person"
-              value={query}
-              onChange={onChange}
-            />
-          </div>
 
-          {results.length > 0 && (
-            <ul className="results">
-              {results.map(person => {
-                if (person.known_for_department === 'Acting') {
-                  return <li key={person.id}>
-                        {
-                            person.known_for.map(movie =>
-                              (<li key={movie.id}>
-                                    <MediaCard movie={movie}/>
-                                </li>
-                              ))
-                        }
-                    </li>;
-                } else {
-                  return (null);
+  return (
+    <form onSubmit={ searchMovie }>
+      <div className="add-page">
+        <div className="container">
+          <div className="add-content">
+            <div className="input-wrapper">
+              <button className="search-button" onClick={searchMovie}>Search</button>
+              <input
+                type="text"
+                placeholder="Search for a person"
+                value={query}
+                onChange={onChange}
+              />
+            </div>
+
+            {results.length > 0 && (
+              <ul className="results">
+                {results.map(person => {
+                  if (person.known_for_department === 'Acting') {
+                    return <li key={person.id}>
+                          {
+                              person.known_for.map(movie =>
+                                (<li key={movie.id}>
+                                      <PersonCard movie={movie}/>
+                                  </li>
+                                ))
+                          }
+                      </li>;
+                  } else {
+                    return (null);
+                  }
+                })
                 }
-              })
-              }
-            </ul>
-          )}
+              </ul>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }

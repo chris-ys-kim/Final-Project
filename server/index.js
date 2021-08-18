@@ -15,41 +15,122 @@ const db = new pg.Pool({ // eslint-disable-line
 });
 
 app.use(staticMiddleware);
+app.use(express.json());
 
-app.use(errorMiddleware);
+app.get('/api/movies/favorites', (req, res, next) => {
+  const sql = `
+  select "favoriteID", "posterUrl", "title"
+  from "favorites"
+  `;
 
-app.post('/api/auth/sign-up', (req, res, next) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    throw new ClientError(400, 'username and password are required fields');
-  }
-
-  argon2
-    .hash(password)
-    .then(hashedPw => {
-      const sql = `
-    insert into 'users'('username', 'hashedPw');
-    values($1, $2)
-    returning*
-    `;
-      const params = [username, hashedPw];
-      if (!username || !password) {
-        throw new ClientError(400, 'username and password is required');
-      }
-      return db.query(sql, params);
-    })
+  db.query(sql)
     .then(result => {
-      const [user] = result.rows;
-      res.status(201).json(user);
+      const favorites = result.rows;
+      res.json(favorites);
     })
     .catch(err => next(err));
 });
 
+app.post('/api/movies/favorites', (req, res, next) => {
+  const sql = `
+    insert into "favorites" ("userID", "posterUrl", "title")
+    values (1, $1, $2)
+    returning *
+  `;
+
+  const { poster_path, title, name } = req.body;
+  const posterUrl = 'https://image.tmdb.org/t/p/w200' + poster_path;
+
+  let params;
+  if(title === undefined) {
+    params = [posterUrl, name];
+  } else {
+    params = [posterUrl, title]
+  }
+
+
+  db.query(sql, params)
+    .then(result => {
+      const [newMovie] = result.rows;
+      res.status(201).json(newMovie);
+    })
+    .catch(err => next(err));
+});
+
+app.delete('/api/movies/favorites', (req, res, next) => {
+  const { favoriteID } = req.body;
+  const sql = `
+    delete from "favorites"
+    where "favoriteID" = $1
+    returning *
+  `;
+
+  const params = [favoriteID];
+  db.query(sql, params)
+    .then(result => {
+      res.sendStatus(204);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/movies/dislikes', (req, res, next) => {
+  const sql = `
+  select "dislikeID", "posterUrl", "title"
+  from "dislikes"
+  `;
+
+  db.query(sql)
+    .then(result => {
+      const dislike = result.rows;
+      res.json(dislike);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/movies/dislikes', (req, res, next) => {
+  const sql = `
+    insert into "dislikes" ("userID", "posterUrl", "title")
+    values (1, $1, $2)
+    returning *
+  `;
+
+  const { poster_path, title, name} = req.body;
+  const posterUrl = 'https://image.tmdb.org/t/p/w200' + poster_path;
+  let params;
+  if(title === undefined) {
+    params = [posterUrl, name];
+  } else {
+    params = [posterUrl, title]
+  }
+
+
+  db.query(sql, params)
+    .then(result => {
+      const [newMovie] = result.rows;
+      res.status(201).json(newMovie);
+    })
+    .catch(err => next(err));
+});
+
+app.delete('/api/movies/dislikes', (req, res, next) => {
+  const { dislikeID } = req.body;
+  const sql = `
+    delete from "dislikes"
+    where "dislikeID" = $1
+    returning *
+  `;
+
+  const params = [dislikeID];
+  db.query(sql, params)
+    .then(result => {
+      res.sendStatus(204);
+    })
+    .catch(err => next(err));
+});
+
+app.use(errorMiddleware);
+
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`express server listening on port ${process.env.PORT}`);
-});
-
-app.get('/test', (req, res) => {
-  res.send('Hello test!');
 });

@@ -17,22 +17,47 @@ const useStyles = makeStyles({
   }
 });
 
-function onClickFav(props) {
-  // add data to database
-  // call POST data
-}
-// function onClickCard(props) {
-//   // add data to database
-//   // call POST data
-//   setIsOpen(!isOpen);
-// }
-
 export default function MediaCard(props) {
 
   const [isOpen, setIsOpen] = useState(false);
+
   function onClickCard(props) {
     setIsOpen(!isOpen);
   }
+
+  function addFavorite(props) {
+    const body = props.movie;
+    fetch('/api/movies/favorites', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(result => {
+        console.log(result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  function addDislike(props) {
+    const body = props.movie;
+    console.log(body);
+    fetch('/api/movies/dislikes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(result => {
+        console.log(result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
   const classes = useStyles();
   const movieImage = 'https://image.tmdb.org/t/p/w200' + props.movie.poster_path;
   return (
@@ -66,10 +91,10 @@ export default function MediaCard(props) {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button onClick={() => onClickFav(props)} size="small" color="primary">
+          <Button onClick={() => addFavorite(props)} size="small" color="primary">
             Add To Favorites
           </Button>
-          <Button size="small" color="primary">
+          <Button onClick={() => addDislike(props)} size="small" color="primary">
             Add To Dislike
           </Button>
         </CardActions>

@@ -9,6 +9,8 @@ import Box from '@material-ui/core/Box';
 import Add from './add';
 import SearchPerson from './searchperson';
 import SearchTV from './searchtv';
+import Favorites from './favorites';
+import Dislike from './dislike';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -83,6 +85,7 @@ export default function SimpleTabs() {
       <TabPanel value={value} index={4}>
         <Dislike/>
       </TabPanel>
+
     </div>
   );
 }
