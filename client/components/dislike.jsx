@@ -13,10 +13,6 @@ export default class Dislike extends React.Component {
     this.mapDislikeMovies = this.mapDislikeMovies.bind(this);
   }
 
-  componentDidMount() {
-    this.getDislike();
-  }
-
   getDislike() {
     fetch('/api/movies/dislikes')
       .then(res => res.json())
@@ -67,6 +63,8 @@ export default class Dislike extends React.Component {
 
     return movieList;
   }
+
+
 
   render(){
   return (

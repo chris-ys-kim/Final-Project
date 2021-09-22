@@ -13,15 +13,11 @@ export default class Favorites extends React.Component {
     this.mapFavoriteMovies = this.mapFavoriteMovies.bind(this);
   }
 
-  componentDidMount() {
-    this.getFavorite();
-  }
-
   getFavorite() {
     fetch('/api/movies/favorites')
       .then(res => res.json())
       .then(favorites => {
-        this.setState({ favoriteMovies: favorites});
+        this.setState({ favoriteMovies: favorites });
       })
       .catch(error => {
         console.error('Error:', error);
@@ -32,7 +28,7 @@ export default class Favorites extends React.Component {
     const data = {};
     data.favoriteID = favoriteID;
 
-    fetch('/api/movies/favorites/', {
+    fetch('/api/movies/favorites', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -66,6 +62,10 @@ export default class Favorites extends React.Component {
     );
 
     return movieList;
+  }
+
+  componentDidMount() {
+    this.getFavorite();
   }
 
   render() {
