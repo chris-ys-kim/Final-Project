@@ -64,6 +64,10 @@ export default class Dislike extends React.Component {
     return movieList;
   }
 
+  componentDidMount() {
+    this.getDislike();
+  }
+
 
 
   render(){
